@@ -1,0 +1,348 @@
+/* ===========================================================
+   트릭컬 사도 이름 외우기 — 스타일 (트릭컬풍 파스텔 테마)
+   색상은 아래 :root 변수만 바꾸면 전체 분위기를 쉽게 조정할 수 있어요.
+   =========================================================== */
+
+/* 사이트 전체에 쓰는 폰트: ONE Mobile POP */
+@font-face {
+  font-family: 'OneMobilePOP';
+  src: url('fonts/OneMobilePOP.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --pink:        #ffb3d1;   /* 메인 분홍 */
+  --pink-deep:   #ff7eb3;   /* 진한 분홍 (버튼 등) */
+  --sky:         #bce4ff;   /* 하늘색 */
+  --sky-deep:    #8fd0ff;
+  --cream:       #fff6fb;   /* 카드 배경 */
+  --ink:         #5a4a55;   /* 글자색 */
+  --ink-soft:    #9a8a95;
+  --good:        #7ad48f;   /* 정답 초록 */
+  --bad:         #ff6b6b;   /* 오답 빨강 */
+  --shadow:      0 8px 24px rgba(255, 126, 179, 0.25);
+  --radius:      20px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'OneMobilePOP', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  color: var(--ink);
+  min-height: 100vh;
+  /* 첨부 이미지를 배경으로 사용 */
+  background: url('assets/background.png') center center / cover no-repeat fixed,
+              linear-gradient(135deg, #ffe3f1 0%, #e7f4ff 55%, #f3e8ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-x: hidden;
+}
+
+/* ----- 화면 전환 ----- */
+.screen { display: none; width: 100%; max-width: 1100px; }
+.screen.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ----- 공통 카드 ----- */
+.card {
+  background: var(--cream);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 36px;
+  text-align: center;
+  border: 3px solid #fff;
+  margin: 0 auto;
+  max-width: 640px;
+}
+
+.title { font-family: 'OneMobilePOP', sans-serif; font-size: 2.1rem; color: var(--pink-deep); margin-bottom: 8px; }
+.subtitle { font-size: 1.2rem; color: var(--ink-soft); margin-bottom: 8px; }
+.update-date {
+  font-size: 0.9rem;
+  color: var(--sky-deep);
+  margin-bottom: 22px;
+}
+
+/* ----- 시작 화면 ----- */
+.rules {
+  text-align: left;
+  background: #fff;
+  border: 2px dashed var(--pink);
+  border-radius: 16px;
+  padding: 18px 22px;
+  margin-bottom: 26px;
+  font-size: 1.1rem;
+  line-height: 1.9;
+}
+.rules ul { padding-left: 22px; }
+.rules b { color: var(--pink-deep); }
+
+/* 첫 화면 모드 선택 (체크박스 옵션) */
+.mode-select {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 22px;
+  text-align: left;
+}
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #fff;
+  border: 2px solid var(--sky);
+  border-radius: 14px;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.option:hover { border-color: var(--pink); background: #fff6fb; }
+.option input[type="checkbox"] {
+  width: 22px; height: 22px;
+  margin-top: 2px;
+  accent-color: var(--pink-deep);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+/* 체크된 옵션 강조 (지원 브라우저에서) */
+.option:has(input:checked) { border-color: var(--pink-deep); background: #fff0f7; }
+.option-text { display: flex; flex-direction: column; gap: 2px; }
+.option-name { font-size: 1.15rem; color: var(--ink); }
+.option-desc { font-size: 0.85rem; color: var(--ink-soft); }
+.start-btn { font-size: 1.3rem; padding: 14px 44px; }
+
+/* 첫 화면 하단의 팬메이드 안내 문구 */
+.disclaimer {
+  margin-top: 22px;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* ----- 버튼 ----- */
+.btn {
+  font-family: 'OneMobilePOP', sans-serif;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 32px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.1s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+.btn.primary {
+  background: linear-gradient(135deg, var(--pink-deep), var(--pink));
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(255, 126, 179, 0.45);
+}
+.btn.primary:hover { filter: brightness(1.05); transform: translateY(-2px); }
+.btn.primary:active { transform: translateY(1px); }
+
+/* ----- 게임 상단 HUD ----- */
+.hud {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.hud-item {
+  background: #fff;
+  border-radius: 999px;
+  padding: 10px 22px;
+  font-size: 1.25rem;
+  font-family: 'OneMobilePOP', sans-serif;
+  box-shadow: var(--shadow);
+  border: 2px solid var(--sky);
+}
+.hud-item span { color: var(--pink-deep); }
+
+/* ----- 게임 본문 좌우 분할 ----- */
+.game-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* 좌우 절반씩 */
+  gap: 18px;
+}
+.panel {
+  background: var(--cream);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 3px solid #fff;
+  padding: 24px;
+  min-height: 460px;
+}
+
+/* 왼쪽: 최근 입력 사도 카드 */
+.left-panel { display: flex; flex-direction: column; align-items: center; }
+.recent-card {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.recent-img-wrap {
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.recent-img-wrap img {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  /* 사각형 박스 대신 사진 윤곽을 따라가는 부드러운 그림자 */
+  filter: drop-shadow(0 6px 12px rgba(255, 126, 179, 0.35));
+}
+.recent-name {
+  font-family: 'OneMobilePOP', sans-serif;
+  font-size: 1.8rem;
+  color: var(--pink-deep);
+  text-align: center;
+  line-height: 1.3;
+}
+.recent-card.empty .recent-name { font-size: 1.2rem; color: var(--ink-soft); }
+
+/* 새 사도가 등장할 때 통통 튀는 효과 */
+.pop { animation: pop 0.35s ease; }
+@keyframes pop {
+  0% { transform: scale(0.7); opacity: 0; }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* 입력 폼 */
+.input-form { display: flex; gap: 10px; width: 100%; }
+.name-input {
+  flex: 1;
+  font-family: 'OneMobilePOP', sans-serif;
+  font-size: 1.4rem;
+  padding: 14px 18px;
+  border: 3px solid var(--sky);
+  border-radius: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.name-input:focus { border-color: var(--pink-deep); }
+.submit-btn { font-size: 1.1rem; padding: 0 26px; }
+
+/* 입력칸 흔들림(오답) 효과 */
+.shake { animation: shake 0.4s ease; }
+.shake .name-input { border-color: var(--bad) !important; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-7px); }
+  80% { transform: translateX(7px); }
+}
+
+.feedback { min-height: 1.6em; margin-top: 10px; font-size: 1.1rem; font-weight: bold; }
+.feedback.good { color: var(--good); }
+.feedback.bad { color: var(--bad); }
+.feedback.hint { color: var(--sky-deep); }
+
+/* 힌트 / 도중 포기 버튼 줄 */
+.game-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+/* 힌트 버튼 (하늘색 보조 버튼) */
+.hint-btn {
+  font-size: 0.95rem;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, var(--sky-deep), var(--sky));
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(143, 208, 255, 0.5);
+}
+.hint-btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
+/* 도중 포기 버튼 (눈에 덜 띄는 보조 버튼) */
+.giveup-btn {
+  font-size: 0.95rem;
+  padding: 8px 20px;
+  background: #fff;
+  color: var(--ink-soft);
+  border: 2px solid var(--ink-soft);
+  box-shadow: none;
+}
+.giveup-btn:hover { filter: none; background: #fbeef4; transform: translateY(-1px); }
+
+/* 오른쪽: 입력한 사도 목록 */
+.list-title {
+  font-family: 'OneMobilePOP', sans-serif;
+  color: var(--sky-deep);
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+.entered-list {
+  list-style: none;
+  max-height: 400px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* 두 줄로 나열 */
+  gap: 8px;
+  padding-right: 6px;
+}
+.entered-list li {
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 1.15rem;
+  border: 2px solid var(--pink);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  animation: pop 0.3s ease;
+}
+.entered-list li .num { color: var(--ink-soft); font-size: 0.9rem; min-width: 1.8em; }
+
+/* ----- 결과 화면 ----- */
+/* 진행 모드 요약 (가나다/자유 · 이격 포함/제외) */
+.mode-summary {
+  display: inline-block;
+  margin: 6px auto 0;
+  padding: 8px 20px;
+  border-radius: 999px;
+  background: #fff0f7;
+  border: 2px solid var(--pink);
+  color: var(--ink);
+  font-size: 1.05rem;
+}
+.mode-summary b { color: var(--pink-deep); }
+
+.result-stats { display: flex; gap: 18px; justify-content: center; margin: 24px 0 28px; flex-wrap: wrap; }
+
+/* 도중 포기 시 보여줄 '입력 못한 사도' 목록 (완주 시엔 숨김) */
+.missing-section { display: none; margin-bottom: 26px; }
+.missing-section.show { display: block; }
+.missing-section .list-title { color: var(--bad); }
+.missing-section .entered-list li { border-color: var(--bad); }
+.stat {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 30px;
+  border: 3px solid var(--sky);
+  box-shadow: var(--shadow);
+}
+.stat-label { font-size: 1.1rem; color: var(--ink-soft); margin-bottom: 8px; }
+.stat-value { font-family: 'OneMobilePOP', sans-serif; font-size: 2.4rem; color: var(--pink-deep); }
+
+/* ----- 작은 화면(휴대폰) 대응: 위아래로 쌓기 ----- */
+@media (max-width: 720px) {
+  .game-body { grid-template-columns: 1fr; }
+  .entered-list { grid-template-columns: 1fr; max-height: 240px; }
+  .panel { min-height: auto; }
+  .recent-img-wrap { min-height: 200px; }
+  .recent-img-wrap img { max-height: 220px; }
+}
