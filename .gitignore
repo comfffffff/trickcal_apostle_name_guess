@@ -6,3 +6,10 @@ desktop.ini
 
 # 미리보기 서버 설정(로컬 전용)
 .claude/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
