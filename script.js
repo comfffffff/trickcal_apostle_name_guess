@@ -214,8 +214,10 @@ function accept(idx) {
   progressEl.textContent = enteredCount;
   listCount.textContent = `(${enteredCount})`;
 
-  feedback.textContent = '정답! 👍';
-  feedback.className = 'feedback good';
+  // Modified by hand
+  //feedback.textContent = '정답! 👍';
+  //feedback.className = 'feedback good';
+  input.placeholder = '정답!';
 
   // 4) 가나다 모드는 다음 순서로 포인터 이동
   if (isSequence) currentIndex = idx + 1;
@@ -242,12 +244,15 @@ function fillMissingList() {
 function handleWrong(message) {
   playWrong();
 
-  feedback.textContent = message;
-  feedback.className = 'feedback bad';
-
+  // Modified by hand
+  // feedback.textContent = message;
+  // feedback.className = 'feedback bad';
+  
   // 입력칸 흔들림 효과
   form.classList.remove('shake'); void form.offsetWidth;
   form.classList.add('shake');
+  input.placeholder = message;
+
 }
 
 // 제출 처리
@@ -270,7 +275,7 @@ function handleSubmit(event) {
     }
   } else if (!includeSkins && skinForms.has(guess)) {
     // 이격 제외 모드인데 이격 사도를 입력함 (가나다 모드여도 이 안내가 우선)
-    handleWrong('여기서 찾으시면 안돼요...');
+    handleWrong('이격 사도는 여기서 찾으시면 안돼요...');
   } else {
     // 명단에 아예 없는 이름
     handleWrong('그런 사도는 없어요...');
