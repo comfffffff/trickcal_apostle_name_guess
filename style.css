@@ -247,7 +247,7 @@ body {
   80% { transform: translateX(7px); }
 }
 
-.feedback { min-height: 1.6em; margin-top: 10px; font-size: 1.1rem; font-weight: bold; }
+.feedback { min-height: 0em; margin-top: 10px; font-size: 1.1rem; font-weight: bold; }
 .feedback.good { color: var(--good); }
 .feedback.bad { color: var(--bad); }
 .feedback.hint { color: var(--sky-deep); }
