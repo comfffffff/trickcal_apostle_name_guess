@@ -389,4 +389,31 @@ body {
   .stat-label { font-size: 0.95rem; }
   .stat-value { font-size: 1.9rem; }
   .mode-summary { font-size: 0.95rem; padding: 7px 16px; }
+
+  /* ---- 게임 화면: 키보드가 올라와도 상단(HUD)이 사라지지 않도록 ----
+     페이지(body) 자체 스크롤을 막고, 본문(.game-body)만 내부 스크롤시킴.
+     HUD는 스크롤 영역 바깥에 있어 항상 고정됨. */
+  body.game-active {
+    height: 100vh;
+    height: 100dvh;      /* 동적 뷰포트 높이 (지원 브라우저에서 우선 적용) */
+    overflow: hidden;    /* 페이지 통째 스크롤 차단 → 자동 스크롤로 HUD가 밀려나지 않음 */
+    padding: 0;
+  }
+  body.game-active #game-screen {
+    height: 100vh;
+    height: 100dvh;
+    width: 100%;
+    max-width: none;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+  }
+  body.game-active .hud { flex-shrink: 0; margin-bottom: 8px; }
+  body.game-active .game-body {
+    flex: 1 1 auto;
+    min-height: 0;                    /* flex 자식이 줄어들며 스크롤되도록 */
+    overflow-y: auto;                 /* 넘치는 내용은 이 영역만 스크롤 */
+    -webkit-overflow-scrolling: touch;
+  }
+  body.game-active .entered-list { max-height: none; }  /* 중첩 스크롤 방지(한 영역만 스크롤) */
 }

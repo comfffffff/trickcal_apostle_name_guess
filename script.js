@@ -187,6 +187,8 @@ function startGame() {
 function showScreen(screen) {
   [startScreen, gameScreen, resultScreen].forEach(s => s.classList.remove('active'));
   screen.classList.add('active');
+  // 게임 화면일 때만 body에 표시 → 모바일에서 페이지 스크롤을 막기 위함
+  document.body.classList.toggle('game-active', screen === gameScreen);
 }
 
 // 정답 처리 (idx = 맞춘 사도의 인덱스)
