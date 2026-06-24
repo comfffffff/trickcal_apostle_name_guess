@@ -390,30 +390,13 @@ body {
   .stat-value { font-size: 1.9rem; }
   .mode-summary { font-size: 0.95rem; padding: 7px 16px; }
 
-  /* ---- 게임 화면: 키보드가 올라와도 상단(HUD)이 사라지지 않도록 ----
-     페이지(body) 자체 스크롤을 막고, 본문(.game-body)만 내부 스크롤시킴.
-     HUD는 스크롤 영역 바깥에 있어 항상 고정됨. */
-  body.game-active {
-    height: 100vh;
-    height: 100dvh;      /* 동적 뷰포트 높이 (지원 브라우저에서 우선 적용) */
-    overflow: hidden;    /* 페이지 통째 스크롤 차단 → 자동 스크롤로 HUD가 밀려나지 않음 */
-    padding: 0;
-  }
-  body.game-active #game-screen {
-    height: 100vh;
-    height: 100dvh;
-    width: 100%;
-    max-width: none;
-    display: flex;
-    flex-direction: column;
-    padding: 8px;
-  }
-  body.game-active .hud { flex-shrink: 0; margin-bottom: 8px; }
-  body.game-active .game-body {
-    flex: 1 1 auto;
-    min-height: 0;                    /* flex 자식이 줄어들며 스크롤되도록 */
-    overflow-y: auto;                 /* 넘치는 내용은 이 영역만 스크롤 */
-    -webkit-overflow-scrolling: touch;
-  }
-  body.game-active .entered-list { max-height: none; }  /* 중첩 스크롤 방지(한 영역만 스크롤) */
+  /* ---- 게임 화면(모바일): 입력칸을 사진보다 '위'로 배치 ----
+     입력칸이 화면 상단(키보드가 닿지 않는 영역)에 오게 되어,
+     포커스해도 자동 스크롤이 거의 없고 상단 HUD가 가려지지 않음.
+     HTML은 그대로 두고 flex의 order로 표시 순서만 바꿈.
+     (왼쪽 패널 자식 순서: 입력칸 → 피드백 → 사진 → 힌트/포기 버튼) */
+  .input-form   { order: 1; }
+  .feedback     { order: 2; }
+  .recent-card  { order: 3; flex: 0 0 auto; margin-top: 14px; margin-bottom: 0; }
+  .game-actions { order: 4; margin-top: 12px; }
 }

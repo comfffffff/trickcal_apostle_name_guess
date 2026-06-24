@@ -187,8 +187,6 @@ function startGame() {
 function showScreen(screen) {
   [startScreen, gameScreen, resultScreen].forEach(s => s.classList.remove('active'));
   screen.classList.add('active');
-  // 게임 화면일 때만 body에 표시 → 모바일에서 페이지 스크롤을 막기 위함
-  document.body.classList.toggle('game-active', screen === gameScreen);
 }
 
 // 정답 처리 (idx = 맞춘 사도의 인덱스)
@@ -202,7 +200,8 @@ function accept(idx) {
   const li = document.createElement('li');
   li.innerHTML = `<span class="num">${enteredCount}</span><span>${apostle.name}</span>`;
   enteredList.appendChild(li);
-  li.scrollIntoView({ block: 'nearest' });
+  // 목록 컨테이너 '내부'에서만 맨 아래로 스크롤 (페이지 전체 스크롤은 건드리지 않음)
+  enteredList.scrollTop = enteredList.scrollHeight;
 
   // 2) 왼쪽 '최근 입력 사도' 카드 갱신 (이름 + 사진)
   recentCard.classList.remove('empty');
